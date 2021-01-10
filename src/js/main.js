@@ -150,4 +150,73 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     window.addEventListener('scroll', showModalByScroll);
+
+    // Slides
+
+    const container = document.querySelector('.menu__field').firstElementChild;
+
+    class MenuItem {
+        constructor({alt, img, name, text, price}){
+            this.alt = alt;
+            this.img = img;
+            this.name = name;
+            this.text = text; 
+            this.price = price;
+        }
+
+        creatorMenuItem(){
+            let codeMenuItem = `
+            <div class="menu__item">
+                <img src="${this.img}" alt="${this.alt}">
+                <h3 class="menu__item-subtitle">Меню "${this.name}"</h3>
+                <div class="menu__item-descr">${this.text}</div>
+                <div class="menu__item-divider"></div>
+                <div class="menu__item-price">
+                    <div class="menu__item-cost">Цена:</div>
+                    <div class="menu__item-total"><span>${this.price}</span> грн/день</div>
+                </div>
+            </div>`;
+
+            return codeMenuItem;
+        }
+    }
+
+    const menuItems = {
+        fitnes : {
+            alt : 'vegy',
+            img : 'img/tabs/vegy.jpg',
+            name : 'Фитнес',
+            text : 'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
+            price : '229'
+        },
+        premium : {
+            alt : 'elite',
+            img : 'img/tabs/elite.jpg',
+            name : 'Премиум',
+            text : 'В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!',
+            price : '550'
+        },
+        post : {
+            alt : 'post',
+            img : 'img/tabs/post.jpg',
+            name : 'Постное',
+            text : 'Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков. ',
+            price : '430'
+        }
+    };
+
+    function creationListMenuItems(objItems, number){
+        
+        let iter = 0;
+
+        for(let i in objItems) {
+            if (iter < number) {
+                let item = new MenuItem (objItems[i]);         
+                container.innerHTML += item.creatorMenuItem();
+                iter++;
+            } else {break;}
+        }
+    }
+
+    creationListMenuItems(menuItems, 3);
 });
