@@ -42,7 +42,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // Timer
 
-    const deadline = '2021-01-11';
+    const deadline = '2021-02-15';
 
     function getTimeRemaining(endtime) {
         const t = Date.parse(endtime) - Date.parse(new Date()),
@@ -69,7 +69,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     function getZero(num) {
-        if (num >= 0 && num <= 10) {
+        if (num >= 0 && num < 10) {
             return `0${num}`;
         } else{
             return num;
@@ -152,83 +152,16 @@ window.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('scroll', showModalByScroll);
 
     // Slides
-
-    // const container = document.querySelector('.menu__field').firstElementChild;
-
-    // class MenuItem {
-    //     constructor({alt, img, name, text, price}){
-    //         this.alt = alt;
-    //         this.img = img;
-    //         this.name = name;
-    //         this.text = text; 
-    //         this.price = price;
-    //     }
-
-    //     creatorMenuItem(){
-    //         let codeMenuItem = `
-    //         <div class="menu__item">
-    //             <img src="${this.img}" alt="${this.alt}">
-    //             <h3 class="menu__item-subtitle">Меню "${this.name}"</h3>
-    //             <div class="menu__item-descr">${this.text}</div>
-    //             <div class="menu__item-divider"></div>
-    //             <div class="menu__item-price">
-    //                 <div class="menu__item-cost">Цена:</div>
-    //                 <div class="menu__item-total"><span>${this.price}</span> грн/день</div>
-    //             </div>
-    //         </div>`;
-
-    //         return codeMenuItem;
-    //     }
-    // }
-
-    // const menuItems = {
-    //     fitnes : {
-    //         alt : 'vegy',
-    //         img : 'img/tabs/vegy.jpg',
-    //         name : 'Фитнес',
-    //         text : 'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
-    //         price : '229'
-    //     },
-    //     premium : {
-    //         alt : 'elite',
-    //         img : 'img/tabs/elite.jpg',
-    //         name : 'Премиум',
-    //         text : 'В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!',
-    //         price : '550'
-    //     },
-    //     post : {
-    //         alt : 'post',
-    //         img : 'img/tabs/post.jpg',
-    //         name : 'Постное',
-    //         text : 'Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков. ',
-    //         price : '430'
-    //     }
-    // };
-
-    // function creationListMenuItems(objItems, number){
-        
-    //     let iter = 0;
-
-    //     for(let i in objItems) {
-    //         if (iter < number) {
-    //             let item = new MenuItem (objItems[i]);         
-    //             container.innerHTML += item.creatorMenuItem();
-    //             iter++;
-    //         } else {break;}
-    //     }
-    // }
-
-    // creationListMenuItems(menuItems, 3);
-
     // Solution from class
 
     class MenuCard {
-        constructor(src, alt, title, descr, price, parentSelector) {
+        constructor(src, alt, title, descr, price, parentSelector, ...classes) {
             this.src = src;
             this.alt = alt;
             this.title = title;
             this.descr = descr;
             this.price = price;
+            this.classes = classes;
             this.parent = document.querySelector(parentSelector);
             this.transfer = 27;
             this.changeToUAH(); 
@@ -240,16 +173,22 @@ window.addEventListener('DOMContentLoaded', () => {
 
         render() {
             const element = document.createElement('div');
+            
+            if(this.classes.length == 0){
+                this.element = 'menu__item';
+                element.classList.add(this.element);
+            } else {
+                this.classes.forEach(className => element.classList.add(className));
+            }
+            
             element.innerHTML = `
-                <div class="menu__item">
-                    <img src=${this.src} alt=${this.alt}>
-                    <h3 class="menu__item-subtitle">${this.title}</h3>
-                    <div class="menu__item-descr">${this.descr}</div>
-                    <div class="menu__item-divider"></div>
-                    <div class="menu__item-price">
-                        <div class="menu__item-cost">Цена:</div>
-                        <div class="menu__item-total"><span>${this.price}</span> грн/день</div>
-                    </div>
+                <img src=${this.src} alt=${this.alt}>
+                <h3 class="menu__item-subtitle">${this.title}</h3>
+                <div class="menu__item-descr">${this.descr}</div>
+                <div class="menu__item-divider"></div>
+                <div class="menu__item-price">
+                    <div class="menu__item-cost">Цена:</div>
+                    <div class="menu__item-total"><span>${this.price}</span> грн/день</div>
                 </div>
             `;
             this.parent.append(element);
@@ -262,7 +201,8 @@ window.addEventListener('DOMContentLoaded', () => {
         'Меню "Фитнес"',
         'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
         9,
-        ".menu .container"
+        ".menu .container",
+        'menu__item'
     ).render();
 
     new MenuCard(
@@ -271,7 +211,8 @@ window.addEventListener('DOMContentLoaded', () => {
         'Меню "Постное"',
         'Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.',
         14,
-        ".menu .container"
+        ".menu .container",
+        'menu__item'
     ).render();
 
     new MenuCard(
@@ -280,7 +221,8 @@ window.addEventListener('DOMContentLoaded', () => {
         'Меню “Премиум”',
         'В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!',
         21,
-        ".menu .container"
+        ".menu .container",
+        'menu__item'
     ).render();
 
 });
